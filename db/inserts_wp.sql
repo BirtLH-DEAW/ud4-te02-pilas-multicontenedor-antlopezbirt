@@ -550,7 +550,7 @@ TRUNCATE TABLE `WORDPRESS_DB_PREFIX_users`;
 --
 
 INSERT INTO `WORDPRESS_DB_PREFIX_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES
-(1, 'WORDPRESS_ADMIN_USER', '$P$BH.0mmUG7WakMu/OYF5.RswJxYmhBf1', 'WORDPRESS_ADMIN_USER', 'WORDPRESS_ADMIN_EMAIL', 'WORDPRESS_BASE_URL', '2025-02-16 13:34:06', '', 0, 'WORDPRESS_ADMIN_USER');
+(1, 'WORDPRESS_ADMIN_USER', 'WORDPRESS_ADMIN_PASS', 'WORDPRESS_ADMIN_USER', 'WORDPRESS_ADMIN_EMAIL', 'WORDPRESS_BASE_URL', '2025-02-16 13:34:06', '', 0, 'WORDPRESS_ADMIN_USER');
 
 --
 -- Índices para tablas volcadas

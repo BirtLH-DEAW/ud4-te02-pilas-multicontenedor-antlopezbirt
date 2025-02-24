@@ -11,15 +11,14 @@ services:
       context: db/
       # Valores a usar por la instalación de Wordpress:
       args:
-        WP_URL: 'localhost:8080/wordpress'
+        WP_URL: 'http://localhost:8080/wordpress'
         WP_DB_NAME: 'wordpress'
         WP_DB_PREFIX: 'wprb'
         WP_DB_USER: 'anton'
         WP_DB_PASS: 'anton'
         WP_ADMIN_USER: 'anton'
+        WP_ADMIN_PASS: 'anton'
         WP_ADMIN_EMAIL: 'antlopez@birt.eus'
-        # - WP_ADMIN_USER: 'anton'
-        # - WP_ADMIN_PASS: 'anton'
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
       MYSQL_DATABASE: 'dwes'
@@ -41,8 +40,7 @@ services:
     ports:
       - 8080:80
     volumes:
-      - php:/var/www/html/php
-      - wordpress:/var/www/html/wordpress
+      - proyecto:/var/www/html
     networks:
       - miapp
 
@@ -51,8 +49,7 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - php:/var/www/html/php
-      - wordpress:/var/www/html/wordpress
+      - proyecto:/var/www/html
     networks:
       - miapp
 
@@ -66,23 +63,47 @@ services:
     networks:
       - miapp
 
+  # WORDPRESS BITNAMI (https://www.docker.com/blog/how-to-dockerize-wordpress/)
   # wordpress:
-  #   build: wordpress/
+  #   image: bitnami/wordpress:6.6.2
   #   ports:
-  #     - 90:80
+  #     - '8082:8080'
   #   environment:
-  #     WORDPRESS_DB_HOST: db
-  #     WORDPRESS_DB_NAME: wordpress
-  #     WORDPRESS_DB_USER: anton
-  #     WORDPRESS_DB_PASSWORD: anton
-  #     WORDPRESS_ADMIN_USERNAME: anton
-  #     WORDPRESS_ADMIN_PASSWORD: anton
+  #     WORDPRESS_DATABASE_HOST: 'db'
+  #     WORDPRESS_DATABASE_PORT_NUMBER: 3306
+  #     WORDPRESS_DATABASE_NAME: 'wordpress'
+  #     WORDPRESS_DATABASE_USER: 'anton'
+  #     WORDPRESS_DATABASE_PASSWORD: 'anton'
+  #     WORDPRESS_TABLE_PREFIX: 'wp_'
+  #     WORDPRESS_BLOG_NAME: 'Mi Blog'
+  #     WORDPRESS_FIRST_NAME: 'Anton'
+  #     WORDPRESS_LAST_NAME: 'Lopez Alvarez'
+  #     WORDPRESS_USERNAME: anton
+  #     WORDPRESS_PASSWORD: anton
+  #     WORDPRESS_EMAIL: antlopez@birt.eus
+  #     WORDPRESS_SMTP_HOST: 
+  #     WORDPRESS_SMTP_PORT: 
+  #     WORDPRESS_SMTP_USER: 
+  #     WORDPRESS_SMTP_PASSWORD: 
   #   networks:
   #     - miapp
 
+# WORDPRESS imagen oficial: https://hub.docker.com/_/wordpress
+  # wordpress:
+  #   image: wordpress:latest
+  #   ports:
+  #     - '8082:80'
+  #   environment:
+  #     WORDPRESS_DB_HOST: 'db'
+  #     WORDPRESS_DB_NAME: 'wordpress'
+  #     WORDPRESS_DB_USER: 'anton'
+  #     WORDPRESS_DB_PASSWORD: 'anton'
+  #   networks:
+  #     - miapp
+
+
 volumes: 
-  php:
-  wordpress:
+  proyecto:
 networks:
   miapp:
     driver: bridge
