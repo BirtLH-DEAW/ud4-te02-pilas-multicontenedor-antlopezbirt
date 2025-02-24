@@ -7,9 +7,19 @@ services:
   # mysql es el nombre que vamos a dar a este primer servicio
   # Será el nombre que tendremos que usar cuando nos refiramos a él
   mysql:
-    build: db/
-    ports:
-      - 3306:3306
+    build:
+      context: db/
+      # Valores a usar por la instalación de Wordpress:
+      args:
+        WP_URL: 'localhost:8080/wordpress'
+        WP_DB_NAME: 'wordpress'
+        WP_DB_PREFIX: 'wprb'
+        WP_DB_USER: 'anton'
+        WP_DB_PASS: 'anton'
+        WP_ADMIN_USER: 'anton'
+        WP_ADMIN_EMAIL: 'antlopez@birt.eus'
+        # - WP_ADMIN_USER: 'anton'
+        # - WP_ADMIN_PASS: 'anton'
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
       MYSQL_DATABASE: 'dwes'
@@ -20,11 +30,19 @@ services:
       - miapp
 
   apache:
-    build: apache/
+    build:
+      context: apache/
+      args:
+        WP_DB_HOST: 'db'
+        WP_DB_NAME: 'wordpress'
+        WP_DB_USER: 'anton'
+        WP_DB_PASS: 'anton'
+        WP_DB_PREFIX: 'wprb'
     ports:
       - 8080:80
     volumes:
-      - proyecto:/var/www/html/
+      - php:/var/www/html/php
+      - wordpress:/var/www/html/wordpress
     networks:
       - miapp
 
@@ -33,14 +51,15 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - proyecto:/var/www/html/
+      - php:/var/www/html/php
+      - wordpress:/var/www/html/wordpress
     networks:
       - miapp
 
   phpmyadmin:
     image: phpmyadmin
     ports:
-      - 8880:80
+      - 8081:80
     environment:
       MYSQL_ROOT_PASSWORD:  
       PMA_HOST: db
@@ -48,7 +67,7 @@ services:
       - miapp
 
   # wordpress:
-  #   image: wordpress
+  #   build: wordpress/
   #   ports:
   #     - 90:80
   #   environment:
@@ -62,9 +81,8 @@ services:
   #     - miapp
 
 volumes: 
-  proyecto:
+  php:
+  wordpress:
 networks:
   miapp:
     driver: bridge
-    driver_opts:
-      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
