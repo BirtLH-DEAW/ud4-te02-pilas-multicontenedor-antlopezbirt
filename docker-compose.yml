@@ -13,7 +13,7 @@ services:
       args:
         WP_URL: 'http://localhost:8080/wordpress'
         WP_DB_NAME: 'wordpress'
-        WP_DB_PREFIX: 'wprb'
+        WP_DB_PREFIX: 'wp_'
         WP_DB_USER: 'anton'
         WP_DB_PASS: 'anton'
         WP_ADMIN_USER: 'anton'
@@ -28,6 +28,7 @@ services:
     networks:
       - miapp
 
+  # Wordpress se instalará dentro del servicio de Apache, junto al proyecto PHP
   apache:
     build:
       context: apache/
@@ -36,7 +37,7 @@ services:
         WP_DB_NAME: 'wordpress'
         WP_DB_USER: 'anton'
         WP_DB_PASS: 'anton'
-        WP_DB_PREFIX: 'wprb'
+        WP_DB_PREFIX: 'wp_'
     ports:
       - 8080:80
     volumes:
