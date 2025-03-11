@@ -1,15 +1,14 @@
-# Versión utilizada ----------------> DEPRECATED
+# La declaración de versión ya no se usa, está obsoleta
 #version: '3' 
 
-# Configuración de los servidores que vamos a necesitar
+# Servicios a integrar
 services: 
  
-  # mysql es el nombre que vamos a dar a este primer servicio
-  # Será el nombre que tendremos que usar cuando nos refiramos a él
+  # MySQL, contendrá las BD del proyecto PHP y Wordpress
   mysql:
     build:
       context: db/
-      # Valores a usar por la instalación de Wordpress:
+      # Se pueden cambiar los valores mediante estos argumentos
       args:
         WP_URL: 'http://localhost:8080/wordpress'
         WP_DB_NAME: 'wordpress'
@@ -28,10 +27,11 @@ services:
     networks:
       - miapp
 
-  # Wordpress se instalará dentro del servicio de Apache, junto al proyecto PHP
+  # Apache, contendrá el proyecto PHP y también el proyecto Wordpress
   apache:
     build:
       context: apache/
+      # Se pueden cambiar los valores de wp-config.php mediante estos argumentos
       args:
         WP_DB_HOST: 'db'
         WP_DB_NAME: 'wordpress'
@@ -41,67 +41,31 @@ services:
     ports:
       - 8080:80
     volumes:
-      - proyecto:/var/www/html
+      - proyecto:/usr/local/apache2/htdocs
     networks:
       - miapp
 
   php:
     build: php/
-    ports:
-      - 9000:9000
+    # No es necesario exponer el puerto de PHP al host, ya que quien accede es el contendor de Apache
+    # Podría incluso ser un problema de seguridad si no fuera una instalación local
+    # ports:
+    #   - 9000:9000
     volumes:
       - proyecto:/var/www/html
     networks:
       - miapp
 
+  # PHPMyAdmin, para gestionar visualmente las bases de datos
   phpmyadmin:
     image: phpmyadmin
     ports:
       - 8081:80
     environment:
-      MYSQL_ROOT_PASSWORD:  
+      MYSQL_ROOT_PASSWORD: 
       PMA_HOST: db
     networks:
       - miapp
-
-  # WORDPRESS BITNAMI (https://www.docker.com/blog/how-to-dockerize-wordpress/)
-  # wordpress:
-  #   image: bitnami/wordpress:6.6.2
-  #   ports:
-  #     - '8082:8080'
-  #   environment:
-  #     WORDPRESS_DATABASE_HOST: 'db'
-  #     WORDPRESS_DATABASE_PORT_NUMBER: 3306
-  #     WORDPRESS_DATABASE_NAME: 'wordpress'
-  #     WORDPRESS_DATABASE_USER: 'anton'
-  #     WORDPRESS_DATABASE_PASSWORD: 'anton'
-  #     WORDPRESS_TABLE_PREFIX: 'wp_'
-  #     WORDPRESS_BLOG_NAME: 'Mi Blog'
-  #     WORDPRESS_FIRST_NAME: 'Anton'
-  #     WORDPRESS_LAST_NAME: 'Lopez Alvarez'
-  #     WORDPRESS_USERNAME: anton
-  #     WORDPRESS_PASSWORD: anton
-  #     WORDPRESS_EMAIL: antlopez@birt.eus
-  #     WORDPRESS_SMTP_HOST: 
-  #     WORDPRESS_SMTP_PORT: 
-  #     WORDPRESS_SMTP_USER: 
-  #     WORDPRESS_SMTP_PASSWORD: 
-  #   networks:
-  #     - miapp
-
-# WORDPRESS imagen oficial: https://hub.docker.com/_/wordpress
-  # wordpress:
-  #   image: wordpress:latest
-  #   ports:
-  #     - '8082:80'
-  #   environment:
-  #     WORDPRESS_DB_HOST: 'db'
-  #     WORDPRESS_DB_NAME: 'wordpress'
-  #     WORDPRESS_DB_USER: 'anton'
-  #     WORDPRESS_DB_PASSWORD: 'anton'
-  #   networks:
-  #     - miapp
-
 
 volumes: 
   proyecto:
