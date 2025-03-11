@@ -62,7 +62,7 @@
 
 FROM httpd:latest
 
-ARG WP_DB_HOST WP_DB_NAME WP_DB_USER WP_DB_PASS WP_DB_PREFIX
+ARG PHP_DB_NAME PHP_DB_USER PHP_DB_PASS WP_DB_HOST WP_DB_NAME WP_DB_USER WP_DB_PASS WP_DB_PREFIX
 
 # Copia el virtualhost
 COPY config/000-default.conf /
@@ -100,11 +100,14 @@ RUN \
 
 ########################## Proyecto PHP ##########################
 
-# Se clona el proyecto de Github y se mueven los ficheros a las rutas correspondientes
+# Se clona el proyecto de Github y se mueven los ficheros a las rutas correspondientes, adaptando index.php a los argumentos
 RUN \
     git clone https://github.com/deaw-birt/UD4-despliegue-PHP.git /proyecto \
     && mkdir -p /usr/local/apache2/htdocs/php/ \
     && mv /proyecto/php/index.php /proyecto/php/dwes.css /usr/local/apache2/htdocs/php/ \
+    && sed -i "s|\$database = \"dwes\"|\$database = \"${PHP_DB_NAME}\"|g" /usr/local/apache2/htdocs/php/index.php \
+    && sed -i "s|\$username = \"dwes\"|\$username = \"${PHP_DB_USER}\"|g" /usr/local/apache2/htdocs/php/index.php \
+    && sed -i "s|\$password = \"dwes\"|\$password = \"${PHP_DB_PASS}\"|g" /usr/local/apache2/htdocs/php/index.php \
     && rm -r /proyecto \
     &&  cat /000-default.conf >> /usr/local/apache2/conf/httpd.conf
 

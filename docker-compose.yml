@@ -1,6 +1,8 @@
 # La declaración de versión ya no se usa, está obsoleta
 #version: '3' 
 
+name: deaw04te02-antlopez
+
 # Servicios a integrar
 services: 
  
@@ -9,7 +11,11 @@ services:
     build:
       context: db/
       # Se pueden cambiar los valores mediante estos argumentos
+      # Tendrán que coincidir con las variables de entorno y con los argumentos de Apache
       args:
+        PHP_DB_NAME: 'dwes04'
+        PHP_DB_USER: 'antlopez'
+        PHP_DB_PASS: 'birt'
         WP_URL: 'http://localhost:8080/wordpress'
         WP_DB_NAME: 'wordpress'
         WP_DB_PREFIX: 'wp_'
@@ -20,9 +26,9 @@ services:
         WP_ADMIN_EMAIL: 'antlopez@birt.eus'
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
-      MYSQL_DATABASE: 'dwes'
-      MYSQL_USER: 'dwes'
-      MYSQL_PASSWORD: 'dwes'
+      MYSQL_DATABASE: 'dwes04'
+      MYSQL_USER: 'antlopez'
+      MYSQL_PASSWORD: 'birt'
     container_name: 'db'
     networks:
       - miapp
@@ -33,6 +39,9 @@ services:
       context: apache/
       # Se pueden cambiar los valores de wp-config.php mediante estos argumentos
       args:
+        PHP_DB_NAME: 'dwes04'
+        PHP_DB_USER: 'antlopez'
+        PHP_DB_PASS: 'birt'
         WP_DB_HOST: 'db'
         WP_DB_NAME: 'wordpress'
         WP_DB_USER: 'anton'
