@@ -18,7 +18,7 @@ services:
         PHP_DB_PASS: 'birt'
         WP_URL: 'http://localhost:8080/wordpress'
         WP_DB_NAME: 'wordpress'
-        WP_DB_PREFIX: 'wp_'
+        WP_DB_PREFIX: 'wp'
         WP_DB_USER: 'anton'
         WP_DB_PASS: 'anton'
         WP_ADMIN_USER: 'anton'
@@ -46,7 +46,7 @@ services:
         WP_DB_NAME: 'wordpress'
         WP_DB_USER: 'anton'
         WP_DB_PASS: 'anton'
-        WP_DB_PREFIX: 'wp_'
+        WP_DB_PREFIX: 'wp'
     ports:
       - 8080:80
     volumes:
